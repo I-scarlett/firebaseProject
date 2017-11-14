@@ -155,12 +155,30 @@ public class SignInActivity extends AppCompatActivity
         String password = etPass.getText().toString();
 
         // TODO: sign the user in with email and password credentials
+        mAuth.signInWithEmailAndPassword(email,password).addOnCompleteListener(this, new OnCompleteListener<AuthResult>() {
+                    @Override
+                    public void onComplete(@NonNull Task<AuthResult> task) {
+                        if (task.isSuccessful()) {
+                            Toast.makeText(SignInActivity.this,"Signed in" , Toast.LENGTH_SHORT).show();
+                        }
+                        else {
+                            Toast.makeText(SignInActivity.this,"Sign in failed" , Toast.LENGTH_SHORT).show();
+
+                        }
+                        updateStatus();
+
+                    }
+
+                }
+        );
 
 
     }
 
     private void signUserOut() {
         // TODO: sign the user out
+
+        mAuth.signOut();
 
         updateStatus();
     }
@@ -174,8 +192,19 @@ public class SignInActivity extends AppCompatActivity
 
         // TODO: Create the user account
 
-        mAuth.createUserWithEmailAndPassword(email,password).addOnCompleteListener(this,new
-        )
+        mAuth.createUserWithEmailAndPassword(email,password).addOnCompleteListener(this, new OnCompleteListener<AuthResult>() {
+                    @Override
+                    public void onComplete(@NonNull Task<AuthResult> task) {
+                        if (task.isSuccessful()) {
+                            Toast.makeText(SignInActivity.this,"User is created" , Toast.LENGTH_SHORT).show();
+                        }
+                        else {
+                            Toast.makeText(SignInActivity.this,"Account creation is failed" , Toast.LENGTH_SHORT).show();
+
+                        }
+                    }
+                }
+        );
 
 
 
