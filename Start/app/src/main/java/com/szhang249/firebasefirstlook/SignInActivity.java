@@ -169,8 +169,21 @@ public class SignInActivity extends AppCompatActivity
 
                     }
 
+                })
+        .addOnFailureListener(new OnFailureListener() {
+            @Override
+            public void onFailure(@NonNull Exception e) {
+                if (e instanceof FirebaseAuthInvalidCredentialsException){
+                    updateStatus("Invalid Password");
+
                 }
-        );
+                else if (e instanceof FirebaseAuthInvalidUserException) {
+                    updateStatus("No account with this email");
+                } else {
+                    updateStatus(e.getLocalizedMessage());
+                }
+            }
+        });
 
 
     }
@@ -196,15 +209,26 @@ public class SignInActivity extends AppCompatActivity
                     @Override
                     public void onComplete(@NonNull Task<AuthResult> task) {
                         if (task.isSuccessful()) {
-                            Toast.makeText(SignInActivity.this,"User is created" , Toast.LENGTH_SHORT).show();
+                            Toast.makeText(SignInActivity.this,"Account was created" , Toast.LENGTH_SHORT).show();
                         }
                         else {
-                            Toast.makeText(SignInActivity.this,"Account creation is failed" , Toast.LENGTH_SHORT).show();
+                            Toast.makeText(SignInActivity.this,"Account creation failed" , Toast.LENGTH_SHORT).show();
 
                         }
                     }
                 }
-        );
+        )
+        .addOnFailureListener(new OnFailureListener() {
+            @Override
+            public void onFailure(@NonNull Exception e) {
+                if(e instanceof FirebaseAuthUserCollisionException){
+                    updateStatus("Email is already used");
+                } else {
+                    updateStatus(e.getLocalizedMessage());
+                }
+            }
+        });
+
 
 
 
